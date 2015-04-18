@@ -9,15 +9,28 @@
         <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>6.4.1</version>
+            <version>6.5</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.5</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
-    <build>
+    <build>       
     <plugins>
         <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -33,10 +46,13 @@
                 <descriptorRefs>
                     <descriptorRef>jar-with-dependencies</descriptorRef>
                 </descriptorRefs>
+                <finalName>${project.build.finalName}-full</finalName>
+                <appendAssemblyId>false</appendAssemblyId>
             </configuration>
         </plugin>
           
         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
             <version>2.4</version>
             <executions>
@@ -44,6 +60,7 @@
                     <id>sources</id>
                     <goals>
                         <goal>jar</goal>
+                        <goal>test-jar</goal>
                     </goals>
                 </execution>
             </executions>
