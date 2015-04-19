@@ -1,23 +1,26 @@
 package cz.sumaj.pv260.checks;
 
-import com.puppycrawl.tools.checkstyle.api.*;
+import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import cz.sumaj.pv260.checks.methods.BrainMethod;
 
 /**
- *
  * @author Jozef Sumaj, Jakub Senko
  */
-public class BrainMethodCheck extends BrainMethodBaseCheck {
+public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
 
-    private static final int DEFAULT_MAX = 1;
+    private static final int DEFAULT_MAX_LOC = 20;
+    private static final int DEFAULT_MAX_CYCLO = 5;
+    private static final int DEFAULT_MAX_NESTING = 3;
+    private static final int DEFAULT_MAX_NOAV = 5;
 
-    public BrainMethodCheck() 
-    {
-        super(DEFAULT_MAX, DEFAULT_MAX, DEFAULT_MAX, DEFAULT_MAX);
+    public BrainMethodCheck() {
+        super(DEFAULT_MAX_LOC, DEFAULT_MAX_CYCLO, DEFAULT_MAX_NESTING,
+                DEFAULT_MAX_NOAV);
     }
-        
+
     @Override
-    public int[] getDefaultTokens()
-    {
+    public int[] getDefaultTokens() {
         return new int[]{
             // listen to methods:
             TokenTypes.CTOR_DEF,
@@ -35,46 +38,63 @@ public class BrainMethodCheck extends BrainMethodBaseCheck {
             TokenTypes.LITERAL_CATCH,
             TokenTypes.QUESTION,
             TokenTypes.LAND,
-            TokenTypes.LOR,
-        };
+            TokenTypes.LOR,};
     }
-    
+
     @Override
-    public void visitTokenHook(DetailAST ast)
-    {
+    public void visitTokenHook(DetailAST ast) {
         switch (ast.getType()) {
             case TokenTypes.VARIABLE_DEF:
-                // process variables count
-                incrementVariables();
+                method.incrementVariableCount();
                 break;
             case TokenTypes.LITERAL_WHILE:
             case TokenTypes.LITERAL_DO:
             case TokenTypes.LITERAL_FOR:
             case TokenTypes.LITERAL_IF:
-                // process nesting
-                incrementNesting();
-                // process cyclomatic complexity
-                incrementComplexity();
+                method.incrementNesting(maxNestingLevel);
+                method.incrementComplexity();
                 break;
             default:
-                // process cyclomatic complexity
-                incrementComplexity();
+                method.incrementComplexity();
+                break;
         }
     }
-    
+
     @Override
-    public void leaveTokenHook(DetailAST ast)
-    {
+    public void leaveTokenHook(DetailAST ast) {
         switch (ast.getType()) {
             case TokenTypes.LITERAL_WHILE:
             case TokenTypes.LITERAL_DO:
             case TokenTypes.LITERAL_FOR:
             case TokenTypes.LITERAL_IF:
-                // process cyclomatic complexity
-                decreaseNesting();
+                method.decreaseNesting();
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void visitMethodHook(DetailAST ast) {
+        if (method == null) {
+            method = new BrainMethod();
+        } else {
+            method.setInnerMethod(true);
+        }
+    }
+
+    @Override
+    public void leaveMethodHook(DetailAST ast) {
+        if (method.isInnerMethod()) {
+            method.setInnerMethod(false);
+            return;
+        }
+
+        countLinesOfCode(ast);
+
+        if (method.brainDisharmonyPresent(maxLinesOfCode, maxCyclomaticComplexity,
+                maxNumberOfVariables)) {
+            log(ast, "Brain method detected.");
         }
     }
 }
