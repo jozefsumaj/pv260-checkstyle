@@ -1,0 +1,4 @@
+Starting audit...
+C:\Users\Jozef\Documents\GitHub\checkstyle\src\test\resources\cz\sumaj\pv260\checks\BrainClass.java:8:5: Brain method detected.
+C:\Users\Jozef\Documents\GitHub\checkstyle\src\test\resources\cz\sumaj\pv260\checks\BrainClass.java:38:5: Brain method detected.
+Audit done.

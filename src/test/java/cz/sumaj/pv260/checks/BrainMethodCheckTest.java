@@ -25,7 +25,8 @@ public class BrainMethodCheckTest extends BaseCheckTestSupport {
 
         // expected: line number: error message
         final String[] expected = {
-            "9:5: " + "Brain method detected.",};
+            "8:5: " + "Brain method detected.",
+            "38:5: " + "Brain method detected."};
 
         verify(checkConfig, getTestClassPath("BrainClass.java"), expected);
     }

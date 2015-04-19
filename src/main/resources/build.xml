@@ -1,7 +1,7 @@
 <project name="CheckstyleRunner" default="checkstyle">
-    <property name="checks" value="GitHub/checkstyle/config.xml"/>
-    <property name="checkstyle" value="checkstyle-6.5-all.jar;GitHub/checkstyle/target/checkstyle-1.0-SNAPSHOT.jar"/>
-    <property name="sources" value="GitHub/tron/src"/>
+    <property name="checks" value="config.xml"/>
+    <property name="checkstyle" value="../../../target/checkstyle-1.0-SNAPSHOT-full.jar"/>
+    <property name="sources" value="../../../src/test/resources"/>
     <property name="output" value="output.xml"/>
     <target name="checkstyle">
         <taskdef resource="checkstyletask.properties" classpath="${checkstyle}"/>

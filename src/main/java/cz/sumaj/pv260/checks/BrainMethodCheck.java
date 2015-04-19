@@ -96,5 +96,7 @@ public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
                 maxNumberOfVariables)) {
             log(ast, "Brain method detected.");
         }
+        
+        method = null;
     }
 }
