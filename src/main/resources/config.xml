@@ -5,10 +5,10 @@
 <module name="Checker">
   <module name="TreeWalker">       
     <module name="cz.sumaj.pv260.checks.BrainMethodCheck">
-      <property name="maxLinesOfCode" value="15"/>
-      <property name="maxCyclomaticComplexity" value="3"/>
+      <property name="maxLinesOfCode" value="50"/>
+      <property name="maxCyclomaticComplexity" value="10"/>
       <property name="maxNestingLevel" value="3"/>
-      <property name="maxNumberOfVariables" value="5"/>
+      <property name="maxNumberOfVariables" value="8"/>
     </module>
   </module>
 </module>

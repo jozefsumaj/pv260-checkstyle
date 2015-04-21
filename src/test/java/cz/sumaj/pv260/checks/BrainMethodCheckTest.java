@@ -14,19 +14,44 @@ public class BrainMethodCheckTest extends BaseCheckTestSupport {
     /**
      * Test verifies detection of brain method disharmony in provided java test
      * class, using check-style module BrainMethodCheck.
+     * 
+     * Test using default configuration (50,10,3,8)
      *
      * @throws Exception
      */
     @Test
-    public void testBrainMethodCheck() throws Exception {
+    public void testDefaultConfig() throws Exception {
         final DefaultConfiguration checkConfig
                 = createCheckConfig(BrainMethodCheck.class);
-        checkConfig.addAttribute("maxLinesOfCode", "1");
+        checkConfig.addAttribute("maxLinesOfCode", "50");
+        checkConfig.addAttribute("maxCyclomaticComplexity", "10");
+        checkConfig.addAttribute("maxNestingLevel", "3");
+        checkConfig.addAttribute("maxNumberOfVariables", "8");
 
         // expected: line number: error message
         final String[] expected = {
+            "8:5: " + "Brain method detected."};
+
+        verify(checkConfig, getTestClassPath("BrainClass.java"), expected);
+    }
+    
+    /**
+     * Test using non-default configuration (30,5,3,3)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testNonDefaultConfig() throws Exception {
+        final DefaultConfiguration checkConfig
+                = createCheckConfig(BrainMethodCheck.class);
+        checkConfig.addAttribute("maxLinesOfCode", "25");
+        checkConfig.addAttribute("maxCyclomaticComplexity", "5");
+        checkConfig.addAttribute("maxNestingLevel", "3");
+        checkConfig.addAttribute("maxNumberOfVariables", "3");
+        
+        final String[] expected = {
             "8:5: " + "Brain method detected.",
-            "38:5: " + "Brain method detected."};
+            "61:5: " + "Brain method detected."};
 
         verify(checkConfig, getTestClassPath("BrainClass.java"), expected);
     }

@@ -5,12 +5,13 @@ package cz.sumaj.pv260.checks;
  */
 public class BrainClass {
 
-    public void firstBrainMethod() {
+    public void brainMethod() {
 
         int foo1 = 1;
         int foo2 = 2;
+        boolean foo = false;
 
-        while (true) {
+        while (foo1 < 10) {
 
             int foo3 = 3;
 
@@ -28,19 +29,42 @@ public class BrainClass {
                     int foo6 = 6;
 
                     if (foo6 < 10) {
-
+                        foo = true;
                     }
                 }
             }
         }
+        
+        try
+        {
+            do
+            {
+                foo1++;
+                if(foo1 == 5)
+                {
+                    throw new Exception("foo1");
+                }
+            }
+            while(foo1 < 20);
+        }
+        catch(Exception ex)
+        {
+            int foo7 = 7;
+        }
+        
+        while(foo2 > 30)
+        {
+            foo2++;
+        }
     }
     
-    public void secondBrainMethod() {
+    public void notSoBadBrainMethod() {
 
         int foo1 = 1;
         int foo2 = 2;
+        boolean foo = false;
 
-        while (true) {
+        while (foo1 < 10) {
 
             int foo3 = 3;
 
@@ -58,7 +82,7 @@ public class BrainClass {
                     int foo6 = 6;
 
                     if (foo6 < 10) {
-
+                        foo = true;
                     }
                 }
             }

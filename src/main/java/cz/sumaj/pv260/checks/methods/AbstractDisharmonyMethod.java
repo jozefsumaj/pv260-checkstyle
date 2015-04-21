@@ -15,7 +15,7 @@ public abstract class AbstractDisharmonyMethod {
     public AbstractDisharmonyMethod() {
         currentVariablesCount = 0;
         currentNestingLevel = 0;
-        currentComplexity = 0;
+        currentComplexity = 1;
         currentLinesCount = 0;
         innerMethod = false;
         maxNestingReached = false;

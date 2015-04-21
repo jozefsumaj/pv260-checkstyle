@@ -9,10 +9,10 @@ import cz.sumaj.pv260.checks.methods.BrainMethod;
  */
 public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
 
-    private static final int DEFAULT_MAX_LOC = 20;
-    private static final int DEFAULT_MAX_CYCLO = 5;
+    private static final int DEFAULT_MAX_LOC = 50;
+    private static final int DEFAULT_MAX_CYCLO = 10;
     private static final int DEFAULT_MAX_NESTING = 3;
-    private static final int DEFAULT_MAX_NOAV = 5;
+    private static final int DEFAULT_MAX_NOAV = 8;
 
     public BrainMethodCheck() {
         super(DEFAULT_MAX_LOC, DEFAULT_MAX_CYCLO, DEFAULT_MAX_NESTING,
@@ -29,16 +29,18 @@ public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
             TokenTypes.STATIC_INIT,
             // listen to variables:
             TokenTypes.VARIABLE_DEF,
-            // listen to cyclomatic tokens:
+            // listen to nesting tokens:
             TokenTypes.LITERAL_WHILE,
             TokenTypes.LITERAL_DO,
             TokenTypes.LITERAL_FOR,
             TokenTypes.LITERAL_IF,
+            TokenTypes.LITERAL_TRY,
+            // listen to other cyclomatic tokens:
             TokenTypes.LITERAL_CASE,
-            TokenTypes.LITERAL_CATCH,
+            TokenTypes.LITERAL_SWITCH,
             TokenTypes.QUESTION,
             TokenTypes.LAND,
-            TokenTypes.LOR,};
+            TokenTypes.LOR};
     }
 
     @Override
@@ -51,10 +53,11 @@ public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
             case TokenTypes.LITERAL_DO:
             case TokenTypes.LITERAL_FOR:
             case TokenTypes.LITERAL_IF:
+            case TokenTypes.LITERAL_TRY:
                 method.incrementNesting(maxNestingLevel);
                 method.incrementComplexity();
                 break;
-            default:
+            default: // for other tokens, just increase complexity
                 method.incrementComplexity();
                 break;
         }
@@ -67,6 +70,7 @@ public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
             case TokenTypes.LITERAL_DO:
             case TokenTypes.LITERAL_FOR:
             case TokenTypes.LITERAL_IF:
+            case TokenTypes.LITERAL_TRY:
                 method.decreaseNesting();
                 break;
             default:
@@ -90,7 +94,7 @@ public class BrainMethodCheck extends AbstractIdentityDisharmonyCheck {
             return;
         }
 
-        countLinesOfCode(ast);
+        method.setLinesCount(countLinesOfCode(ast));
 
         if (method.brainDisharmonyPresent(maxLinesOfCode, maxCyclomaticComplexity,
                 maxNumberOfVariables)) {
